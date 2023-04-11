@@ -15,7 +15,7 @@ enum ServerStatus {
 
 class SocketService with ChangeNotifier{
    
-   //la primera vez que creo la instancia voy a tratar de conectar el socket
+   //la primera vez que creo la instancia voy a stratar de conectar el socket
    ServerStatus _serverStatus = ServerStatus.Connecting;
 
    //constructor
