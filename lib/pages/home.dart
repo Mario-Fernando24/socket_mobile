@@ -1,7 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:generoapp/models/band.dart';
+import 'package:generomobile/models/band.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -78,25 +79,55 @@ class _HomePageState extends State<HomePage> {
 
     final textController = new TextEditingController();
 
-    return  showDialog(
+    if(Platform.isAndroid){
+    
+        return  showDialog(
+          context: context, 
+          builder: (context){
+            return AlertDialog(
+              title: Text('Nuevo genero musical'),
+              content: TextField(
+                controller: textController,
+              ),
+              actions: [
+                MaterialButton(
+                  child: Text('Agregar'),
+                  elevation: 5,
+                  textColor: Colors.blue[100],
+                  onPressed: ()=>addBandToList(textController.text)
+                  )
+              ],
+            );
+          },  
+        );
+
+    }
+
+    showCupertinoDialog(
       context: context, 
-      builder: (context){
-        return AlertDialog(
+      builder: ( _ ){
+         return CupertinoAlertDialog(
           title: Text('Nuevo genero musical'),
-          content: TextField(
+          content: CupertinoTextField(
             controller: textController,
           ),
-          actions: <Widget>[
-            MaterialButton(
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
               child: Text('Agregar'),
-              elevation: 5,
-              textColor: Colors.blue[100],
-              onPressed: ()=>addBandToList(textController.text)
+              onPressed: ()=>addBandToList(textController.text),
+              ),
+              CupertinoDialogAction(
+                isDestructiveAction: true,
+              child: Text('Cancelar'),
+              onPressed: ()=>Navigator.pop(context),
               )
           ],
-        );
-      },  
+         );
+      }
     );
+
+
     
     
   
@@ -104,8 +135,13 @@ class _HomePageState extends State<HomePage> {
 
 
   void addBandToList(String name){
+
+    print("=========================================================");
+    print(name);
+    print("=========================================================");
+    
     if(name.length>1){
-      this.bands.add(new Band(id: DateTime.now().toString(), name: name,votes: 0));
+     this.bands.add(new Band(id: DateTime.now().toString(), name: name,votes: 0));
       setState(() {});
     }
     Navigator.pop(context);
